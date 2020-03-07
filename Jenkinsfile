@@ -30,11 +30,11 @@ node {
                         )
                          sh "git config --global user.email 'user@test.com'"
                          sh "git config --global user.name 'Jagmandeep Kaur'"
-                         sh 'git config --global push.default simple'
+                         sh 'git config --global push.default current'
                           sh('touch testing')
                           sh('git add --all')
                           sh ('git commit -m "Merged develop branch to master"')
-                          sh ('git push origin Testing-Jenkins')
+                          sh ('git push https://Jagman13:Satnaam!13@helm-charts.git>')
              }
         }
 // 	stage('Building image') {
