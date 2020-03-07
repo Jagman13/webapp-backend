@@ -50,7 +50,7 @@ node {
     // sh 'git merge develop'
      sh('mkdir testing')
      sh('git add --all')
-     sh ('git commit -m "Merged develop branch to master')
+     sh ('git commit -m "Merged develop branch to master"')
      sh ('git push origin Testing-Jenkins')
      }
 
