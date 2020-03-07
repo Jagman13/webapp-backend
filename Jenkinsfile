@@ -47,7 +47,11 @@ node {
 
     stage('updating helm repo'){
      dir('helmChart'){
-    // sh 'git merge develop'
+    // sh 'git merge develop
+    sh "git config --global user.email 'user@test.com'"
+    sh "git config --global user.name 'Jagmandeep Kaur'"
+    sh 'git config --global push.default simple'
+
      sh('mkdir testing')
      sh('git add --all')
      sh ('git commit -m "Merged develop branch to master"')
