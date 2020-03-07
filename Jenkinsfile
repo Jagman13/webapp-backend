@@ -5,17 +5,17 @@ node {
     def githubCredential = 'Github'
     def commit_id
 	
-	stage('Clone repository') {
-        /* Cloning the Repository to our Workspace */
-
-
-
-        sh 'rm webapp-backend -rf; mkdir webapp-backend'
-        dir('webapp-backend') {
-                checkout scm
-            }
-
-    }
+// 	stage('Clone repository') {
+//         /* Cloning the Repository to our Workspace */
+//
+//
+//
+//         sh 'rm webapp-backend -rf; mkdir webapp-backend'
+//         dir('webapp-backend') {
+//                 checkout scm
+//             }
+//
+//     }
 
     stage('Clone another repository') {
             /* Cloning the Repository to our Workspace */
@@ -30,27 +30,27 @@ node {
                         )
              }
         }
-	stage('Building image') {
-        dir('webapp-backend'){
-        commit_id = sh(returnStdout: true, script: 'git rev-parse HEAD')
-  		echo "$commit_id"
-        dockerImage = docker.build ("${env.registry}")
-        }
-	}
-	stage('Registring image') {
-	    dir('webapp-backend'){
-        docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$commit_id")
-		}
-	 }
-    }
+// 	stage('Building image') {
+//         dir('webapp-backend'){
+//         commit_id = sh(returnStdout: true, script: 'git rev-parse HEAD')
+//   		echo "$commit_id"
+//         dockerImage = docker.build ("${env.registry}")
+//         }
+// 	}
+// 	stage('Registring image') {
+// 	    dir('webapp-backend'){
+//         docker.withRegistry( '', registryCredential ) {
+//             dockerImage.push("$commit_id")
+// 		}
+// 	 }
+//     }
 
     stage('updating helm repo'){
      dir('helmChart'){
     // sh 'git merge develop'
      sh('mkdir testing')
-     sh 'git commit -m "Merged develop branch to master'
-     sh "git push origin Testing-Jenkins"
+     sh ('git commit -m "Merged develop branch to master')
+     sh ('git push origin Testing-Jenkins')
      }
 
     }
