@@ -21,7 +21,7 @@ node {
             /* Cloning the Repository to our Workspace */
 
 
-
+            sh 'rm webapp-backend -rf'
             sh 'rm helmChart -rf; mkdir helmChart'
                 dir('helmChart') {
                     git ( branch: 'Testing-Jenkins',
@@ -52,7 +52,7 @@ node {
     sh "git config --global user.name 'Jagmandeep Kaur'"
     sh 'git config --global push.default simple'
 
-     sh('mkdir testing')
+     sh('touch testing')
      sh('git add --all')
      sh ('git commit -m "Merged develop branch to master"')
      sh ('git push origin Testing-Jenkins')
