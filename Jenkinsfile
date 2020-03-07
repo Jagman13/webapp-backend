@@ -28,6 +28,13 @@ node {
                           credentialsId: githubCredential,
                           url: 'https://github.com/Jagman13/helm-charts.git'
                         )
+                         sh "git config --global user.email 'user@test.com'"
+                         sh "git config --global user.name 'Jagmandeep Kaur'"
+                         sh 'git config --global push.default simple'
+                          sh('touch testing')
+                          sh('git add --all')
+                          sh ('git commit -m "Merged develop branch to master"')
+                          sh ('git push origin Testing-Jenkins')
              }
         }
 // 	stage('Building image') {
@@ -45,18 +52,18 @@ node {
 // 	 }
 //     }
 
-    stage('updating helm repo'){
-     dir('helmChart'){
-    // sh 'git merge develop
-    sh "git config --global user.email 'user@test.com'"
-    sh "git config --global user.name 'Jagmandeep Kaur'"
-    sh 'git config --global push.default simple'
-
-     sh('touch testing')
-     sh('git add --all')
-     sh ('git commit -m "Merged develop branch to master"')
-     sh ('git push origin Testing-Jenkins')
-     }
-
-    }
+//     stage('updating helm repo'){
+//      dir('helmChart'){
+//     // sh 'git merge develop
+//
+//
+//      sh('touch testing')
+//      sh('git add --all')
+//      sh ('git commit -m "Merged develop branch to master"')
+//      sh ('git push origin Testing-Jenkins')
+//
+//      //sh('git push https://${GIT_AUTHOR_NAME}:${GIT_PASSWORD}@github.com/a/a.git)
+//      }
+//
+//     }
 }
