@@ -10,11 +10,9 @@ node {
 
 
 
-        sh 'rm helmChart -rf; mkdir helmChart'
+        sh 'rm webapp-backend -rf; mkdir webapp-backend'
         dir('webapp-backend') {
-                git branch: 'Testing',
-                credentialsId: githubCredential,
-                git url: 'https://github.com/Jagman13/webapp-backend.git'
+                checkout scm
             }
 
     }
@@ -26,9 +24,10 @@ node {
 
             sh 'rm helmChart -rf; mkdir helmChart'
                 dir('helmChart') {
-                    git branch: 'Testing-Jenkins',
-                    credentialsId: githubCredential,
-                    git url: 'https://github.com/Jagman13/helm-charts.git'
+                    git ( branch: 'Testing-Jenkins',
+                          credentialsId: githubCredential,
+                          url: 'https://github.com/Jagman13/helm-charts.git'
+                        )
              }
         }
 	stage('Building image') {
