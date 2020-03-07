@@ -34,7 +34,7 @@ node {
                           sh('touch testing')
                           sh('git add --all')
                           sh ('git commit -m "Merged develop branch to master"')
-                          sh ('git push https://Jagman13:Satnaam!13@helm-charts.git>')
+                          sh ('git push https://Jagman13:Satnaam!13@helm-charts.git')
              }
         }
 // 	stage('Building image') {
