@@ -2,68 +2,82 @@ node {
 
     def dockerImage
     def registryCredential = 'DockerHub'
-    def githubCredential = 'Github'
+    def githubCredential = 'GithubKey'
     def commit_id
-	
-// 	stage('Clone repository') {
-//         /* Cloning the Repository to our Workspace */
-//
-//
-//
-//         sh 'rm webapp-backend -rf; mkdir webapp-backend'
-//         dir('webapp-backend') {
-//                 checkout scm
-//             }
-//
-//     }
 
-    stage('Clone another repository') {
-            /* Cloning the Repository to our Workspace */
-
-
-            sh 'rm webapp-backend -rf'
-            sh 'rm helmChart -rf; mkdir helmChart'
-                dir('helmChart') {
-                    git ( branch: 'Testing-Jenkins',
-                          credentialsId: githubCredential,
-                          url: 'https://github.com/Jagman13/helm-charts.git'
-                        )
-                         sh "git config --global user.email 'user@test.com'"
-                         sh "git config --global user.name 'Jagmandeep Kaur'"
-                         sh 'git config --global push.default current'
-                          sh('touch testing')
-                          sh('git add --all')
-                          sh ('git commit -m "Merged develop branch to master"')
-                          sh ('git push https://Jagman13:Satnaam!13@helm-charts.git')
-             }
+    def nextVersionFromGit(scope) {
+        def latestVersion = sh returnStdout: true, script: 'yq r ./back-end/Chart.yaml version'
+        def (major, minor, patch) = latestVersion.tokenize('.').collect { it.toInteger() }
+        def nextVersion
+        switch (scope) {
+            case 'major':
+                nextVersion = "${major + 1}.0.0"
+                break
+            case 'minor':
+                nextVersion = "${major}.${minor + 1}.0"
+                break
+            case 'patch':
+                nextVersion = "${major}.${minor}.${patch + 1}"
+                break
         }
-// 	stage('Building image') {
-//         dir('webapp-backend'){
-//         commit_id = sh(returnStdout: true, script: 'git rev-parse HEAD')
-//   		echo "$commit_id"
-//         dockerImage = docker.build ("${env.registry}")
-//         }
-// 	}
-// 	stage('Registring image') {
-// 	    dir('webapp-backend'){
-//         docker.withRegistry( '', registryCredential ) {
-//             dockerImage.push("$commit_id")
-// 		}
-// 	 }
-//     }
+        nextVersion
+    }
+	
+	stage('Clone repository') {
+        /* Cloning the Repository to our Workspace */
 
-//     stage('updating helm repo'){
-//      dir('helmChart'){
-//     // sh 'git merge develop
-//
-//
-//      sh('touch testing')
-//      sh('git add --all')
-//      sh ('git commit -m "Merged develop branch to master"')
-//      sh ('git push origin Testing-Jenkins')
-//
-//      //sh('git push https://${GIT_AUTHOR_NAME}:${GIT_PASSWORD}@github.com/a/a.git)
-//      }
-//
-//     }
+
+
+        sh 'rm webapp-backend -rf; mkdir webapp-backend'
+        dir('webapp-backend') {
+                checkout scm
+            }
+
+    }
+	stage('Building image') {
+        dir('webapp-backend'){
+        commit_id = sh(returnStdout: true, script: 'git rev-parse HEAD')
+  		echo "$commit_id"
+        dockerImage = docker.build ("${env.registry}")
+        }
+	}
+	stage('Registring image') {
+	    dir('webapp-backend'){
+        docker.withRegistry( '', registryCredential ) {
+            dockerImage.push("$commit_id")
+		}
+	 }
+    }
+
+   stage('Clone another repository') {
+     /* Cloning the Repository to our Workspace */
+
+
+      sh 'rm webapp-backend -rf'
+               sh 'rm helmChart -rf; mkdir helmChart'
+                   dir('helmChart') {
+                       git ( branch: 'Testing-Jenkins',
+                             credentialsId: githubCredential,
+                             url: 'git@github.com:Jagman13/helm-charts.git'
+                           )
+   //                           sh "git config --global user.email 'user@test.com'"
+   //                           sh "git config --global user.name 'test'"
+   //                                                   sh 'git config --global push.default current'
+                                                     echo "${BUILD_NUMBER}"
+                                                     sh "pwd"
+                                                     sh "ls"
+                                                     updatedVersion= nextVersionFromGit(patch)
+                                                     echo "UpdatedVersion"+ $updatedVersion
+                                                     sh "yq r ./back-end/Chart.yaml version"
+                                                     sh "yq w -i ./back-end/Chart.yaml 'version' ${updatedVersion}"
+                                                     sh "yq r back-end/Chart.yaml version"
+                                                     sh "yq w -i ./back-end/values.yaml 'image.repository' ${env.registry}:12345"
+                                                     sh('git add --all')
+                                                     sh ('git commit -m "Merged develop branch to master"')
+                                                     sshagent (credentials: ['GithubKey']) {
+                                                       sh ('git push origin Testing-Jenkins')
+                   }
+
+                }
+           }
 }
