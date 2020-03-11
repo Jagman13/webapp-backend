@@ -50,8 +50,8 @@ node {
                                                      echo "${BUILD_NUMBER}"
                                                      sh "pwd"
                                                      sh "ls"
-                                                     updatedVersion= nextVersionFromGit(patch)
-                                                     echo "UpdatedVersion"+ $updatedVersion
+                                                     updatedVersion= nextVersionFromGit('patch')
+                                                     echo "UpdatedVersion"+ updatedVersion
                                                      sh "yq r ./back-end/Chart.yaml version"
                                                      sh "yq w -i ./back-end/Chart.yaml 'version' ${updatedVersion}"
                                                      sh "yq r back-end/Chart.yaml version"
