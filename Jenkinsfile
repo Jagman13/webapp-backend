@@ -5,23 +5,7 @@ node {
     def githubCredential = 'GithubKey'
     def commit_id
 
-    def nextVersionFromGit(scope) {
-        def latestVersion = sh returnStdout: true, script: 'yq r ./back-end/Chart.yaml version'
-        def (major, minor, patch) = latestVersion.tokenize('.').collect { it.toInteger() }
-        def nextVersion
-        switch (scope) {
-            case 'major':
-                nextVersion = "${major + 1}.0.0"
-                break
-            case 'minor':
-                nextVersion = "${major}.${minor + 1}.0"
-                break
-            case 'patch':
-                nextVersion = "${major}.${minor}.${patch + 1}"
-                break
-        }
-        nextVersion
-    }
+
 	
 	stage('Clone repository') {
         /* Cloning the Repository to our Workspace */
@@ -81,3 +65,22 @@ node {
                 }
            }
 }
+
+
+def nextVersionFromGit(scope) {
+        def latestVersion = sh returnStdout: true, script: 'yq r ./back-end/Chart.yaml version'
+        def (major, minor, patch) = latestVersion.tokenize('.').collect { it.toInteger() }
+        def nextVersion
+        switch (scope) {
+            case 'major':
+                nextVersion = "${major + 1}.0.0"
+                break
+            case 'minor':
+                nextVersion = "${major}.${minor + 1}.0"
+                break
+            case 'patch':
+                nextVersion = "${major}.${minor}.${patch + 1}"
+                break
+        }
+        nextVersion
+    }
