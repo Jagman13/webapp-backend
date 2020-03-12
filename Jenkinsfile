@@ -56,7 +56,7 @@ node {
        }
    }
 
-def nextVersionFromGit(scope) {
+    def nextVersionFromGit(scope) {
         def latestVersion = sh returnStdout: true, script: 'yq r ./back-end/Chart.yaml version'
         def (major, minor, patch) = latestVersion.tokenize('.').collect { it.toInteger() }
         def nextVersion
