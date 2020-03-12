@@ -73,3 +73,5 @@ def nextVersionFromGit(scope) {
         }
         nextVersion
     }
+
+}
