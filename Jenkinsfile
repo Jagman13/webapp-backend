@@ -55,7 +55,7 @@ node {
                                                      sh "yq r ./back-end/Chart.yaml version"
                                                      sh "yq w -i ./back-end/Chart.yaml 'version' ${updatedVersion}"
                                                      sh "yq r back-end/Chart.yaml version"
-                                                     sh "yq w -i ./back-end/values.yaml 'image.repository' ${env.registry}:12345"
+                                                     sh "yq w -i ./back-end/values.yaml 'image.repository' ${env.registry}:${commit_id}"
                                                      sh('git add --all')
                                                      sh ('git commit -m "Merged develop branch to master"')
                                                      sshagent (credentials: ['GithubKey']) {
