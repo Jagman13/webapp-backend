@@ -82,5 +82,6 @@ def nextVersionFromGit(scope) {
                 nextVersion = "${major}.${minor}.${patch + 1}"
                 break
         }
+
         nextVersion
     }
